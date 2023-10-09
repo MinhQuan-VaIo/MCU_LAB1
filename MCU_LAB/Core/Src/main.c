@@ -62,7 +62,13 @@ static void MX_GPIO_Init(void);
   * @retval int
   */
 void clearAllClock () {
-HAL_GPIO_WritePin (GPIOA , GPIO_PIN_All , RESET);
+	HAL_GPIO_WritePin (GPIOA , GPIO_PIN_All , RESET);
+}
+void setNumberOnClock ( int num) {
+	uint16_t LED [12] = { PA4_Pin, PA5_Pin, PA6_Pin, PA7_Pin, PA8_Pin, PA9_Pin,
+	  	  	  	  	  	  	PA10_Pin, PA11_Pin, PA12_Pin, PA13_Pin, PA14_Pin, PA15_Pin
+	  	  	  	  	  	  };
+	HAL_GPIO_WritePin (GPIOA , LED[num], SET);
 }
 int main(void)
 {
@@ -92,20 +98,14 @@ int main(void)
 
   /* USER CODE END 2 */
 
-  /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint16_t LED [12] = { GPIO_PIN_4 , GPIO_PIN_5 , GPIO_PIN_6 , GPIO_PIN_7 ,
-  GPIO_PIN_8 , GPIO_PIN_9 , GPIO_PIN_10 , GPIO_PIN_11 , GPIO_PIN_12 ,
-  GPIO_PIN_13 , GPIO_PIN_14 , GPIO_PIN_15 };
-  int i = 0;
   while (1)
   {
-	  if(i >= 12) i = 0;
-	  while (i < 12){
-	  	  HAL_GPIO_WritePin (GPIOA , LED [i], SET);
-	  	  i++;
-	  	  HAL_Delay (1000) ;
+	  for(int i = 0; i < 12; i++){
+		  if(i % 2 == 0) setNumberOnClock(i);
+		  HAL_Delay(1000);
 	  }
+
 	  clearAllClock();
 	  HAL_Delay(1000);
   }
