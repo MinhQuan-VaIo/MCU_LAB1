@@ -47,6 +47,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -83,26 +84,165 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
-	  // to do Ex3
+  enum TLS {
+          RED1_GREEN2,
+    	  RED1_YELLOW2,
+    	  GREEN1_RED2,
+    	  YELLOW1_RED2,
+        };
+      // Initialize the current state of the traffic light
+      int counter = 3;
+      int light = 5;
+      enum TLS current = RED1_GREEN2;
+      enum TLS next = current;
+      while (1){
+        /* USER CODE END WHILE */
+        displayDigit(light);
+    	  switch (current) {
+    	  	    case RED1_GREEN2:
+    	  	    	HAL_GPIO_WritePin(RED1_GPIO_Port, RED1_Pin, SET);
+    	  	    	HAL_GPIO_WritePin(GREEN2_GPIO_Port, GREEN2_Pin, SET);
+    	  	    	HAL_GPIO_WritePin(RED2_GPIO_Port, RED2_Pin, RESET);
+    	  	    	HAL_GPIO_WritePin(GREEN1_GPIO_Port, GREEN1_Pin, RESET);
+    	  	    	HAL_GPIO_WritePin(YELLOW1_GPIO_Port, YELLOW1_Pin, RESET);
+    	  	    	HAL_GPIO_WritePin(YELLOW2_GPIO_Port, YELLOW1_Pin, RESET);
+    	  	    	counter--;
+    	  	    	light--;
+    	  	    	if(counter <= 0)
+    	  	    	{
+    	  	    		next = RED1_YELLOW2;
+    	  	    		counter = 2;
+    	  	    	}
+    	  	    	break;
+    	  	    case RED1_YELLOW2:
+    	  	    	HAL_GPIO_WritePin(YELLOW2_GPIO_Port, YELLOW2_Pin, SET);
+    	  	    	HAL_GPIO_WritePin(GREEN2_GPIO_Port, GREEN2_Pin, RESET);
+    	  	    	counter--;
+    	  	    	light--;
+    	  	    	if(counter <= 0)
+    	  	    	{
+    	  	    		next = GREEN1_RED2;
+    	  		    	counter = 3;
+    	  		    	light = 3;
+    	  	    	}
+    	  	    	break;
+    	  	    case GREEN1_RED2:
+    	  	    	HAL_GPIO_WritePin(RED1_GPIO_Port, RED1_Pin, RESET);
+    	  	    	HAL_GPIO_WritePin(RED2_GPIO_Port, RED2_Pin, SET);
+    	  	    	HAL_GPIO_WritePin(GREEN1_GPIO_Port, GREEN1_Pin, SET);
+    	  	    	HAL_GPIO_WritePin(YELLOW2_GPIO_Port, YELLOW2_Pin, RESET);
+    	  	    	counter--;
+    	  	    	light--;
+    	  	    	if(counter <= 0)
+    	  	    	{
+    	  	    		next = YELLOW1_RED2;
+    	  		    	counter = 2;
+    	  		    	light = 2;
+    	  	    	}
+    	  	    	break;
+    	  	    case YELLOW1_RED2:
+    	  	    	HAL_GPIO_WritePin(YELLOW1_GPIO_Port, YELLOW1_Pin, SET);
+    	  	    	HAL_GPIO_WritePin(GREEN1_GPIO_Port, GREEN1_Pin, RESET);
+    	  	    	counter--;
+    	  	    	light--;
+    	  	    	if(counter <= 0)
+    	  	    	{
+    	  	    		next = RED1_GREEN2;
+    	  		    	counter = 3;
+    	  		    	light = 5;
+    	  	    	}
+    	  	    	break;
+    	  	  }
+    	  	  current = next;
+    	  	  HAL_Delay(1000);
+        /* USER CODE BEGIN 3 */
+      }
+      /* USER CODE END 3 */
+    }
 
-    /* USER CODE BEGIN 3 */
+    /**
+      * @brief System Clock Configuration
+      * @retval None
+    * @brief System Clock Configuration
+    * @retval None
+    */
+  void displayDigit(int val){
+      switch (val)
+      {
+      case 0:
+          HAL_GPIO_WritePin(GPIOB,
+          				PB3_Pin | PB4_Pin| PB5_Pin | PB6_Pin| PB7_Pin
+                          | PB8_Pin, GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOB, PB9_Pin | PB10_Pin, GPIO_PIN_SET);
+          break;
+      case 1:
+          HAL_GPIO_WritePin(GPIOB, PB4_Pin | PB5_Pin, GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOB,
+          				PB3_Pin | PB6_Pin| PB8_Pin | PB7_Pin | PB9_Pin
+                          | PB10_Pin, GPIO_PIN_SET);
+          break;
+      case 2:
+          HAL_GPIO_WritePin(GPIOB,
+          		PB3_Pin | PB4_Pin| PB7_Pin | PB6_Pin | PB9_Pin,
+                  GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOB, PB5_Pin | PB8_Pin | PB10_Pin,
+                  GPIO_PIN_SET);
+          break;
+      case 3:
+      	HAL_GPIO_WritePin(GPIOB,
+      	        		PB3_Pin | PB4_Pin |PB5_Pin | PB6_Pin | PB9_Pin,
+      	                GPIO_PIN_RESET);
+      	HAL_GPIO_WritePin(GPIOB,  PB7_Pin |PB8_Pin | PB10_Pin,
+      	                GPIO_PIN_SET);
+          break;
+      case 4:
+          HAL_GPIO_WritePin(GPIOB,
+                  PB8_Pin | PB9_Pin | PB4_Pin | PB5_Pin,
+                  GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOB,
+          		PB3_Pin | PB6_Pin | PB7_Pin | PB10_Pin,
+                  GPIO_PIN_SET);
+          break;
+      case 5:
+          HAL_GPIO_WritePin(GPIOB,
+          		PB3_Pin| PB5_Pin | PB6_Pin | PB8_Pin | PB9_Pin,
+                  GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOB, PB4_Pin | PB7_Pin | PB10_Pin,
+                  GPIO_PIN_SET);
+          break;
+      case 6:
+          HAL_GPIO_WritePin(GPIOB,
+          		PB3_Pin| PB5_Pin | PB6_Pin| PB7_Pin | PB8_Pin | PB9_Pin,
+  				GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOB, PB4_Pin | PB10_Pin, GPIO_PIN_SET);
+          break;
+      case 7:
+          HAL_GPIO_WritePin(GPIOB,
+                  PB3_Pin | PB4_Pin| PB5_Pin,
+                  GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOB,
+          		PB6_Pin| PB7_Pin| PB8_Pin | PB9_Pin | PB10_Pin,
+                  GPIO_PIN_SET);
+          break;
+      case 8:
+          HAL_GPIO_WritePin(GPIOB,
+                  PB3_Pin | PB4_Pin| PB5_Pin | PB6_Pin | PB7_Pin | PB8_Pin | PB9_Pin, GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOB, PB10_Pin, GPIO_PIN_SET);
+          break;
+      case 9:
+          HAL_GPIO_WritePin(GPIOB,
+          		PB3_Pin | PB4_Pin | PB5_Pin | PB6_Pin |PB8_Pin | PB9_Pin, GPIO_PIN_RESET);
+          HAL_GPIO_WritePin(GPIOB, PB7_Pin| PB10_Pin, GPIO_PIN_SET);
+          break;
+      }
   }
-  /* USER CODE END 3 */
-}
-
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -132,6 +272,47 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief GPIO Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOA, RED1_Pin|RED2_Pin|YELLOW1_Pin|YELLOW2_Pin
+                          |GREEN1_Pin|GREEN2_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, PB10_Pin|PB3_Pin|PB4_Pin|PB5_Pin
+                          |PB6_Pin|PB7_Pin|PB8_Pin|PB9_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : RED1_Pin RED2_Pin YELLOW1_Pin YELLOW2_Pin
+                           GREEN1_Pin GREEN2_Pin */
+  GPIO_InitStruct.Pin = RED1_Pin|RED2_Pin|YELLOW1_Pin|YELLOW2_Pin
+                          |GREEN1_Pin|GREEN2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : PB10_Pin PB3_Pin PB4_Pin PB5_Pin
+                           PB6_Pin PB7_Pin PB8_Pin PB9_Pin */
+  GPIO_InitStruct.Pin = PB10_Pin|PB3_Pin|PB4_Pin|PB5_Pin
+                          |PB6_Pin|PB7_Pin|PB8_Pin|PB9_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
