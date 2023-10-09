@@ -63,13 +63,16 @@ static void MX_GPIO_Init(void);
   */
 uint16_t LED [12] = { PA4_Pin, PA5_Pin, PA6_Pin, PA7_Pin, PA8_Pin, PA9_Pin,
   	  	  	  	  	  	  	PA10_Pin, PA11_Pin, PA12_Pin, PA13_Pin, PA14_Pin, PA15_Pin
-  	  	  	  	  	  	  };
+  	  };
+//Ex 7
 void clearAllClock () {
 	HAL_GPIO_WritePin (GPIOA , GPIO_PIN_All , RESET);
 }
+//Ex 8
 void setNumberOnClock ( int num) {
 	HAL_GPIO_WritePin (GPIOA , LED[num], SET);
 }
+//Ex 9
 void clearNumberOnClock ( int num) {
 	HAL_GPIO_WritePin (GPIOA , LED[num], RESET);
 }
