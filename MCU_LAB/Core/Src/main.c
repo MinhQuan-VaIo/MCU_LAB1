@@ -88,12 +88,22 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   /* USER CODE END 2 */
-
+  int status_LED = 2;
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
+	  if(status_LED == 2){
+		  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin, RESET);
+		  HAL_GPIO_WritePin(GPIOA, LED_YELLOW_Pin, SET);
+	  }
+	  else if (status_LED >= 4){
+		  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin, SET);
+		  HAL_GPIO_WritePin(GPIOA, LED_YELLOW_Pin, RESET);
+		  status_LED = 0;
+	  }
+	  status_LED++;
 	  HAL_Delay(1000);
     /* USER CODE BEGIN 3 */
   }
