@@ -91,6 +91,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  // Exercise 5: Countdown LED to the 4 way Traffic
   enum TLS {
          RED1_GREEN2,
    	  RED1_YELLOW2,
