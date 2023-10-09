@@ -104,17 +104,29 @@ int main(void)
   /* USER CODE END 2 */
 
   /* USER CODE BEGIN WHILE */
+  int hour = 4;
+  int minute = 17;
+  int second = 52;
   while (1)
   {
-	  for(int i = 0; i < 12; i++){
-		  if(i % 2 == 0) setNumberOnClock(i);
-		  HAL_Delay(1000);
-	  }
+  clearAllClock (); // clear all clock LED
+  	  if ( second == 60) {
+  		  	  second = 0;
+  		  	  	  minute += 1;
+  	  } else second += 1;
 
-	  clearNumberOnClock(10);
-	  HAL_Delay(1000);
+  	  if ( minute == 60) {
+  		  minute = 0;
+  		  hour += 1;
+  	  }
+  	  if ( hour == 12) hour = 0;
+  // set hour , second and minute on clock
+  	  	  setNumberOnClock ( hour );
+  	  	  setNumberOnClock ( minute /5) ;
+  	  	  setNumberOnClock ( second /5) ;
+
+  	  	  HAL_Delay (1000) ;
   }
-  /* USER CODE END 3 */
 }
 
 /**
