@@ -61,14 +61,17 @@ static void MX_GPIO_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+uint16_t LED [12] = { PA4_Pin, PA5_Pin, PA6_Pin, PA7_Pin, PA8_Pin, PA9_Pin,
+  	  	  	  	  	  	  	PA10_Pin, PA11_Pin, PA12_Pin, PA13_Pin, PA14_Pin, PA15_Pin
+  	  	  	  	  	  	  };
 void clearAllClock () {
 	HAL_GPIO_WritePin (GPIOA , GPIO_PIN_All , RESET);
 }
 void setNumberOnClock ( int num) {
-	uint16_t LED [12] = { PA4_Pin, PA5_Pin, PA6_Pin, PA7_Pin, PA8_Pin, PA9_Pin,
-	  	  	  	  	  	  	PA10_Pin, PA11_Pin, PA12_Pin, PA13_Pin, PA14_Pin, PA15_Pin
-	  	  	  	  	  	  };
 	HAL_GPIO_WritePin (GPIOA , LED[num], SET);
+}
+void clearNumberOnClock ( int num) {
+	HAL_GPIO_WritePin (GPIOA , LED[num], RESET);
 }
 int main(void)
 {
@@ -82,7 +85,6 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -106,7 +108,7 @@ int main(void)
 		  HAL_Delay(1000);
 	  }
 
-	  clearAllClock();
+	  clearNumberOnClock(10);
 	  HAL_Delay(1000);
   }
   /* USER CODE END 3 */
