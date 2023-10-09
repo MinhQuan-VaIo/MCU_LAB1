@@ -61,6 +61,9 @@ static void MX_GPIO_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+void clearAllClock () {
+HAL_GPIO_WritePin (GPIOA , GPIO_PIN_All , RESET);
+}
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -97,10 +100,14 @@ int main(void)
   int i = 0;
   while (1)
   {
-	  if (i >= 12) i = 0;
-	  	  HAL_GPIO_TogglePin (GPIOA , LED [i]);
+	  if(i >= 12) i = 0;
+	  while (i < 12){
+	  	  HAL_GPIO_WritePin (GPIOA , LED [i], SET);
 	  	  i++;
 	  	  HAL_Delay (1000) ;
+	  }
+	  clearAllClock();
+	  HAL_Delay(1000);
   }
   /* USER CODE END 3 */
 }
