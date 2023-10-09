@@ -173,6 +173,7 @@ int main(void)
    * @brief System Clock Configuration
    * @retval None
    */
+	//Exercise 4: Display 7-segemnt_LED
  void displayDigit(int val){
      switch (val)
      {
